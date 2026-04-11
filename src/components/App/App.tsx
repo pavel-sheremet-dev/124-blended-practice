@@ -31,6 +31,8 @@ export default function App() {
     setPage(page);
   };
 
+  const closeModal = () => setIsOpenModal(false);
+
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
@@ -43,8 +45,8 @@ export default function App() {
         </button>
       </header>
       {isOpenModal && (
-        <Modal onClose={() => setIsOpenModal(false)}>
-          <CreatePostForm />
+        <Modal onClose={closeModal}>
+          <CreatePostForm onClose={closeModal} />
         </Modal>
       )}
       {isSuccess && <PostList posts={data.posts} />}
