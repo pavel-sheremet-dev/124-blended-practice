@@ -10,7 +10,7 @@ export default function PostList({ posts }: PostListPrors) {
     <ul className={css.list}>
       {posts.map((post) => {
         return (
-          <li className={css.listItem}>
+          <li key={post.id} className={css.listItem}>
             <h2 className={css.title}>{post.title}</h2>
             <p className={css.content}>{post.body}</p>
             <div className={css.footer}>

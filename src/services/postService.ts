@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Post } from "../types/post";
+import { Post, PostFormData } from "../types/post";
 
 axios.defaults.baseURL = "https://jsonplaceholder.typicode.com";
 
@@ -15,7 +15,13 @@ export const fetchPosts = async (searchText: string, page: number) => {
   return { posts: res.data, totalPages };
 };
 
-export const createPost = async (newPost) => {};
+export const createPost = async (newPost: PostFormData) => {
+  const res = await axios.post<Post>("/posts", newPost);
+
+  console.log(res.data);
+
+  return res.data;
+};
 
 export const editPost = async (newDataPost) => {};
 
