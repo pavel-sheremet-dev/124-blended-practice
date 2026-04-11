@@ -10,10 +10,12 @@ export default function App() {
     <div className={css.app}>
       <header className={css.toolbar}>
         <SearchBox />
-        <Pagination />
+        <Pagination currentPage={1} onPageChange={() => {}} totalPages={5} />
         <button className={css.button}>Create post</button>
       </header>
-      <Modal>{/* Передати через children компонент CreatePostForm або EditPostForm */}</Modal>
+      <Modal>
+        <div>Контент модального вікна</div>
+      </Modal>
       <PostList />
     </div>
   );
