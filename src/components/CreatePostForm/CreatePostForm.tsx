@@ -1,11 +1,31 @@
 import * as Yup from "yup";
 import { Field, Form, Formik, FormikHelpers, ErrorMessage } from "formik";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import css from "./CreatePostForm.module.css";
+import { PostFormData } from "../../types/post";
+import { createPost } from "../../services/postService";
 
-export default function PostForm() {
+const initialValues: PostFormData = { title: "", body: "" };
+
+export default function CreatePostForm() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: ["post"],
+    mutationFn: createPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["post"] });
+    },
+  });
+
+  const handleSubmit = (values: PostFormData, actions: FormikHelpers<PostFormData>) => {
+    console.log(values);
+    mutation.mutate(values);
+    actions.resetForm();
+  };
   return (
-    <Formik initialValues={} onSubmit={} validationSchema={}>
+    <Formik initialValues={initialValues} onSubmit={handleSubmit}>
       <Form className={css.form}>
         <div className={css.formGroup}>
           <label htmlFor="title">Title</label>
@@ -23,7 +43,7 @@ export default function PostForm() {
           <button type="button" className={css.cancelButton}>
             Cancel
           </button>
-          <button type="submit" className={css.submitButton} disabled={}>
+          <button type="submit" className={css.submitButton} disabled={false}>
             Create post
           </button>
         </div>
