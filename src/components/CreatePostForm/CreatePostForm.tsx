@@ -8,7 +8,11 @@ import { createPost } from "../../services/postService";
 
 const initialValues: PostFormData = { title: "", body: "" };
 
-export default function CreatePostForm() {
+interface CreatePostFormProps {
+  onClose: () => void;
+}
+
+export default function CreatePostForm({ onClose }: CreatePostFormProps) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -16,6 +20,7 @@ export default function CreatePostForm() {
     mutationFn: createPost,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["post"] });
+      onClose();
     },
   });
 
@@ -40,7 +45,7 @@ export default function CreatePostForm() {
         </div>
 
         <div className={css.actions}>
-          <button type="button" className={css.cancelButton}>
+          <button type="button" className={css.cancelButton} onClick={onClose}>
             Cancel
           </button>
           <button type="submit" className={css.submitButton} disabled={false}>
