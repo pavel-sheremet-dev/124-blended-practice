@@ -5,9 +5,10 @@ import { deletePost } from "../../services/postService";
 
 interface PostListPrors {
   posts: Post[];
+  selectPost: (post: Post) => void;
 }
 
-export default function PostList({ posts }: PostListPrors) {
+export default function PostList({ posts, selectPost }: PostListPrors) {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -26,7 +27,9 @@ export default function PostList({ posts }: PostListPrors) {
             <h2 className={css.title}>{post.title}</h2>
             <p className={css.content}>{post.body}</p>
             <div className={css.footer}>
-              <button className={css.edit}>Edit</button>
+              <button className={css.edit} onClick={() => selectPost(post)}>
+                Edit
+              </button>
               <button
                 className={css.delete}
                 onClick={() => {

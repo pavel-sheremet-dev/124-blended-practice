@@ -23,7 +23,14 @@ export const createPost = async (newPost: PostFormData) => {
   return res.data;
 };
 
-export const editPost = async (newDataPost) => {};
+type UpdatePostData = Omit<Post, "userId">;
+
+export const editPost = async (newDataPost: UpdatePostData) => {
+  const { id, ...body } = newDataPost;
+  const res = await axios.put<Post>(`/posts/${id}`, body);
+
+  return res.data;
+};
 
 export const deletePost = async (postId: number) => {
   const res = await axios.delete<Post>(`/posts/${postId}`);
