@@ -1,5 +1,6 @@
 'use client';
 
+import { useParams, useRouter } from 'next/navigation';
 // import { useParams, useRouter } from 'next/navigation';
 // import { useQuery } from '@tanstack/react-query';
 
@@ -7,33 +8,47 @@
 
 import css from './PostDetails.module.css';
 import { useEffect } from 'react';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+import { fetchPostById } from '@/lib/api';
 // import { User } from '@/types/user';
 
 export default function PostDetailsClient() {
-  // const handleClickBack = () => {};
+  const { id } = useParams<{ id: string }>();
+  console.log(id);
+  const router = useRouter();
+  const handleClickBack = () => {
+    router.back();
+  };
 
-  useEffect(() => {
-    const fn = async () => {};
-    fn();
-  }, []);
+  const { data } = useQuery({
+    queryKey: ['posts', id],
+    queryFn: () => fetchPostById(id),
+    placeholderData: keepPreviousData,
+    refetchOnMount: false,
+  });
+
+  console.log(data);
 
   return (
     <>
       <main className={css.main}>
         <div className={css.container}>
           <div className={css.item}>
-            <button className={css.backBtn}>← Back</button>
+            <button onClick={handleClickBack} className={css.backBtn}>
+              ← Back
+            </button>
+            {data && (
+              <div className={css.post}>
+                <div className={css.wrapper}>
+                  <div className={css.header}>
+                    <h2>{data.title}</h2>
+                  </div>
 
-            <div className={css.post}>
-              <div className={css.wrapper}>
-                <div className={css.header}>
-                  <h2>Post title</h2>
+                  <p className={css.content}>{data?.body}</p>
                 </div>
-
-                <p className={css.content}>Post body</p>
+                <p className={css.user}>Author: {data.user.name}</p>
               </div>
-              <p className={css.user}>Author: User name</p>
-            </div>
+            )}
           </div>
         </div>
       </main>
