@@ -1,28 +1,35 @@
-import Link from 'next/link';
+'use client';
 
-import css from './Header.module.css';
-import TagsMenu from '../UsersMenu/UsersMenu';
+import Link from 'next/link';
+import { MdCurrencyExchange } from 'react-icons/md';
+import { usePathname } from 'next/navigation';
+
+import styles from './Header.module.css';
 
 export default function Header() {
+  const pathname = usePathname();
+
   return (
-    <header className={css.header}>
-      <div className={css.headerContainer}>
-        <Link href="/" aria-label="Home" className={css.headerLink}>
-          Postly
-        </Link>
-        <nav aria-label="Main Navigation">
-          <ul className={css.navigation}>
-            <li className={css.navigationItem}>
-              <Link className={css.navigationLink} href="/">
+    <header className={styles.header}>
+      <div className={styles.wrapper}>
+        <MdCurrencyExchange className={styles.logo} />
+        <nav>
+          <ul className={styles.nav}>
+            <li>
+              <Link href="/" className={pathname === '/' ? styles.active : styles.link}>
                 Home
               </Link>
             </li>
-            <li className={css.navigationItem}>
-              <TagsMenu />
+            <li>
+              <Link href="/rates" className={pathname === '/rates' ? styles.active : styles.link}>
+                Rates
+              </Link>
             </li>
           </ul>
         </nav>
       </div>
+
+      {/* ✔ Add base currency here !!! */}
     </header>
   );
 }
