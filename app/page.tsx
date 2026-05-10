@@ -5,22 +5,29 @@ import Container from '@/components/Container/Container';
 import Heading from '@/components/Heading/Heading';
 
 import css from './page.module.css';
+import ExchangeForm from '@/components/ExchangeForm/ExchangeForm';
+import ExchangeInfo from '@/components/ExchangeInfo/ExchangeInfo';
+import { useCurrencyStore } from '@/lib/stores/currencyStore';
+import Loader from '@/components/Loader/Loader';
 
 export default function Home() {
-  const isError = false;
-
+  const exchangeInfo = useCurrencyStore((state) => state.exchangeInfo);
+  const isError = useCurrencyStore((state) => state.isError);
+  const isLoading = useCurrencyStore((state) => state.isLoading);
   return (
     <main className={css.main}>
       <Section>
         <Container>
-          <Heading info title="What currencies do you want to exchange?🙂" />
-
+          <Heading bottom info title="What currencies do you want to exchange?🙂" />
+          <ExchangeForm />
+          {exchangeInfo && <ExchangeInfo data={exchangeInfo} />}
           {isError && (
             <Heading
               error
               title="Something went wrong...😐 Check the data validity and try again!"
             />
           )}
+          {isLoading && <Loader />}
         </Container>
       </Section>
     </main>

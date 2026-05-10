@@ -1,4 +1,6 @@
+import { Query } from '@/types/query';
 import axios from 'axios';
+import { Rate } from '../stores/currencyStore';
 
 const apiKey = process.env.NEXT_PUBLIC_API_LAYER_API_KEY;
 
@@ -7,18 +9,32 @@ const instance = axios.create({
   headers: { apikey: apiKey ?? '' },
 });
 
-export const exchangeCurrency = async (credentials) => {
+type ResponseData = {
+  query: Query;
+  info: {
+    rate: number;
+  };
+  result: number;
+};
+
+export const exchangeCurrency = async (credentials: Query) => {
   const {
     data: { query, info, result },
-  } = await instance.get('/convert', {
+  } = await instance.get<ResponseData>('/convert', {
     params: credentials,
   });
 
   return { ...query, rate: info.rate, result };
 };
 
-export const latestRates = async (baseCurrency) => {
-  const { data } = await instance.get(`/latest?symbols&base=${baseCurrency}`);
+type RatesResponseData = {
+  rates: {
+    [x: string]: number;
+  };
+};
+
+export const latestRates = async (baseCurrency: string): Promise<Rate[]> => {
+  const { data } = await instance.get<RatesResponseData>(`/latest?symbols&base=${baseCurrency}`);
 
   return Object.entries(data.rates);
 };
