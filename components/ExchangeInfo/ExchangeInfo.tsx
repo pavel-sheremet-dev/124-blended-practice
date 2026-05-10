@@ -1,6 +1,13 @@
+import { type ExchangeInfo } from '@/lib/stores/currencyStore';
 import styles from './ExchangeInfo.module.css';
 
-export default function ExchangeInfo({ amount, from, to, rate, result }) {
+interface ExchangeInfoProps {
+  data: ExchangeInfo;
+}
+
+export default function ExchangeInfo({
+  data: { amount, from, to, rate, result },
+}: ExchangeInfoProps) {
   return (
     <div className={styles.wrapper}>
       <div className={styles.box}>
